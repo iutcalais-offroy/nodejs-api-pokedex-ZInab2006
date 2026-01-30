@@ -5,9 +5,20 @@ import {prisma} from "../src/database";
 import {CardModel} from "../src/generated/prisma/models/Card";
 import {PokemonType} from "../src/generated/prisma/enums";
 
+/**
+ * Cette fonction sert à Sélectionner aléatoirement n éléments d'un tableau
+ */
+function getRandomItems<T>(array: T[], count: number): T[] {
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
 async function main() {
     console.log("🌱 Starting database seed...");
 
+    // Supprission des des DECK pour respecter les contraintes de clés étrangères
+    await prisma.deckCard.deleteMany();
+    await prisma.deck.deleteMany();
     await prisma.card.deleteMany();
     await prisma.user.deleteMany();
 
@@ -57,6 +68,49 @@ async function main() {
     );
 
     console.log(`✅ Created ${pokemonData.length} Pokemon cards`);
+
+    // Créer les decks de démarrage pour chaque utilisateur
+    console.log("\n Creating starter decks...");
+
+    // Sélectionner aléatoirement 10 cartes pour chaque deck
+    const randomCardsForRed = getRandomItems(createdCards, 10);
+    const randomCardsForBlue = getRandomItems(createdCards, 10);
+
+    // Créer le deck pour l'utilisateur red
+    const redDeck = await prisma.deck.create({
+        data: {
+            name: "Starter Deck",
+            userId: redUser.id,
+        },
+    });
+
+    // Créer les DeckCard pour le deck de red
+    await prisma.deckCard.createMany({
+        data: randomCardsForRed.map((card) => ({
+            deckId: redDeck.id,
+            cardId: card.id,
+        })),
+    });
+
+    console.log(`Created "Starter Deck" for ${redUser.username} with ${randomCardsForRed.length} cards`);
+
+    // Créer le deck pour l'utilisateur blue
+    const blueDeck = await prisma.deck.create({
+        data: {
+            name: "Starter Deck",
+            userId: blueUser.id,
+        },
+    });
+
+    // Créer les DeckCard pour le deck de blue
+    await prisma.deckCard.createMany({
+        data: randomCardsForBlue.map((card) => ({
+            deckId: blueDeck.id,
+            cardId: card.id,
+        })),
+    });
+
+    console.log(` Created "Starter Deck" for ${blueUser.username} with ${randomCardsForBlue.length} cards`);
 
     console.log("\n🎉 Database seeding completed!");
 }
