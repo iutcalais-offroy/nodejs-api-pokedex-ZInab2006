@@ -3,6 +3,7 @@ import {env} from "./env";
 import express, {Request, Response} from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
+import cardRoutes from "./routes/card.routes";
 import {authenticateToken} from "./middlewares/auth.middleware";
 
 // Create Express app
@@ -28,6 +29,9 @@ app.get("/api/health", (_req, res) => {
 
 // Auth routes
 app.use("/api/auth", authRoutes);
+
+// Cards routes (public)
+app.use("/api/cards", cardRoutes);
 
 // Route de test protégée (pour tester le middleware)
 app.get("/api/me", authenticateToken, (req: Request, res: Response) => {
