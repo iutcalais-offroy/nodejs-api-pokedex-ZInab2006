@@ -4,6 +4,7 @@ import express, {Request, Response} from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 import cardRoutes from "./routes/card.routes";
+import deckRoutes from "./routes/deck.routes";
 import {authenticateToken} from "./middlewares/auth.middleware";
 
 // Create Express app
@@ -32,6 +33,9 @@ app.use("/api/auth", authRoutes);
 
 // Cards routes (public)
 app.use("/api/cards", cardRoutes);
+
+// Decks routes (protégées)
+app.use("/api/decks", deckRoutes);
 
 // Route de test protégée (pour tester le middleware)
 app.get("/api/me", authenticateToken, (req: Request, res: Response) => {
