@@ -1,7 +1,9 @@
 import {createServer} from "http";
 import {env} from "./env";
-import express from "express";
+import express, {Request, Response} from "express";
 import cors from "cors";
+import authRoutes from "./routes/auth.routes";
+import {authenticateToken} from "./middlewares/auth.middleware";
 
 // Create Express app
 export const app = express();
@@ -24,6 +26,17 @@ app.get("/api/health", (_req, res) => {
     res.json({status: "ok", message: "TCG Backend Server is running"});
 });
 
+// Auth routes
+app.use("/api/auth", authRoutes);
+
+// Route de test protégée (pour tester le middleware)
+app.get("/api/me", authenticateToken, (req: Request, res: Response) => {
+    res.json({
+        message: "Vous êtes authentifié",
+        user: req.user,
+    });
+});
+
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
     // Create HTTP server
@@ -33,8 +46,8 @@ if (require.main === module) {
     // Start server
     try {
         httpServer.listen(env.PORT, () => {
-            console.log(`\n🚀 Server is running on http://localhost:${env.PORT}`);
-            console.log(`🧪 Socket.io Test Client available at http://localhost:${env.PORT}`);
+            console.log(`\n Server is running on http://localhost:${env.PORT}`);
+            console.log(` Socket.io Test Client available at http://localhost:${env.PORT}`);
         });
     } catch (error) {
         console.error("Failed to start server:", error);
