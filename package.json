@@ -17,7 +17,11 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "npm run db:generate && tsx prisma/seed.ts",
-    "db:reset": "npm run db:generate && prisma migrate reset --force && npm run db:seed"
+    "db:reset": "npm run db:generate && prisma migrate reset --force && npm run db:seed",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json,yml,yaml}\" \"tests/**/*.{ts,js}\" \"prisma/**/*.ts\" \"*.{ts,js,json,md,yml,yaml,mjs}\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json,yml,yaml}\" \"tests/**/*.{ts,js}\" \"prisma/**/*.ts\" \"*.{ts,js,json,md,yml,yaml,mjs}\" --ignore-path .prettierignore"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.1.0",
@@ -33,9 +37,11 @@
     "prisma": "7.1.0",
     "socket.io": "4.6.1",
     "swagger-ui-express": "5.0.1",
-    "uuid": "13.0.0"
+    "uuid": "13.0.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/bcryptjs": "2.4.6",
     "@types/cors": "2.8.17",
     "@types/express": "4.17.21",
@@ -46,11 +52,17 @@
     "@types/supertest": "^6.0.3",
     "@types/swagger-ui-express": "4.1.8",
     "@types/uuid": "10.0.0",
+    "@types/yamljs": "^0.2.34",
     "@vitest/coverage-v8": "4.0.15",
     "@vitest/ui": "4.0.15",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
     "supertest": "^7.2.2",
     "tsx": "4.7.0",
     "typescript": "5.4.5",
+    "typescript-eslint": "^8.54.0",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "4.0.15",
     "vitest-mock-extended": "3.1.0"

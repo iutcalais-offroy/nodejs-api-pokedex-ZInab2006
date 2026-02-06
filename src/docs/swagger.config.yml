@@ -1,0 +1,233 @@
+openapi: 3.0.0
+info:
+  title: API Pokedex TCG
+  version: 1.0.0
+  description: API REST pour gérer des decks de cartes Pokémon avec authentification JWT
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:3001
+    description: Serveur de développement
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Token JWT obtenu via /api/auth/sign-in'
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+        username:
+          type: string
+          example: 'username'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'Bulbasaur'
+        hp:
+          type: integer
+          example: 45
+        attack:
+          type: integer
+          example: 49
+        type:
+          type: string
+          enum:
+            [
+              Normal,
+              Fire,
+              Water,
+              Electric,
+              Grass,
+              Ice,
+              Fighting,
+              Poison,
+              Ground,
+              Flying,
+              Psychic,
+              Bug,
+              Rock,
+              Ghost,
+              Dragon,
+              Dark,
+              Steel,
+              Fairy,
+            ]
+          example: 'Grass'
+        pokedexNumber:
+          type: integer
+          example: 1
+        imgUrl:
+          type: string
+          nullable: true
+          example: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+
+    DeckCard:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        cardId:
+          type: integer
+          example: 1
+        deckId:
+          type: integer
+          example: 1
+        card:
+          $ref: '#/components/schemas/Card'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+
+    Deck:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'Mon Deck'
+        userId:
+          type: integer
+          example: 1
+        deckCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeckCard'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: 'Bad Request'
+        message:
+          type: string
+          example: "Message d'erreur détaillé"
+
+    SignUpRequest:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+        username:
+          type: string
+          example: 'username'
+        password:
+          type: string
+          format: password
+          example: 'password123'
+
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+        password:
+          type: string
+          format: password
+          example: 'password123'
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        user:
+          $ref: '#/components/schemas/User'
+
+    CreateDeckRequest:
+      type: object
+      required:
+        - name
+        - cards
+      properties:
+        name:
+          type: string
+          example: 'Mon Deck'
+        cards:
+          type: array
+          items:
+            type: integer
+          minItems: 10
+          maxItems: 10
+          example: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    UpdateDeckRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Nouveau nom'
+        cards:
+          type: array
+          items:
+            type: integer
+          minItems: 10
+          maxItems: 10
+          example: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+tags:
+  - name: Authentication
+    description: Gestion de l'authentification JWT
+  - name: Cards
+    description: Gestion des cartes Pokémon (endpoint public)
+  - name: Decks
+    description: Gestion des decks de cartes (nécessite authentification)
