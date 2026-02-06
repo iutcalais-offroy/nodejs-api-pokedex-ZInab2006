@@ -10,24 +10,39 @@ import {
 
 const router = Router();
 
-// Toutes les routes sont protégées par l'authentification
+/**
+ * Toutes les routes nécessitent un token JWT valide
+ */
 router.use(authenticateToken);
 
-// Créer un nouveau deck
- 
+/**
+ * Route POST /api/decks
+ * Crée un nouveau deck
+ */
 router.post("/", createDeck);
 
- // Lister tous les decks de l'utilisateur authentifié
- 
+/**
+ * Route GET /api/decks/mine
+ * Liste tous les decks de l'utilisateur
+ */
 router.get("/mine", getMyDecks);
 
-// Consulter un deck spécifique par son ID
+/**
+ * Route GET /api/decks/:id
+ * Récupère un deck par son ID
+ */
 router.get("/:id", getDeckById);
 
-// Modifier un deck par son ID
+/**
+ * Route PATCH /api/decks/:id
+ * Modifie un deck
+ */
 router.patch("/:id", updateDeck);
 
-// Supprimer un deck par son ID                     
+/**
+ * Route DELETE /api/decks/:id
+ * Supprime un deck
+ */
 router.delete("/:id", deleteDeck);
 
 export default router;

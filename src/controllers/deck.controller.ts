@@ -14,8 +14,16 @@ interface UpdateDeckBody {
 
 const DECK_SIZE = 10;
 
-// Créer un nouveau deck pour l'utilisateur authentifié
- 
+/**
+ * Crée un nouveau deck avec 10 cartes
+ * @route POST /api/decks
+ * @param {Request<{}, {}, CreateDeckBody>} req - Requête avec name et cards dans le body, req.user.userId depuis le middleware
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne le deck créé avec ses cartes
+ * @throws {401} Token manquant
+ * @throws {400} Nom manquant ou deck pas exactement 10 cartes ou cartes inexistantes
+ * @throws {500} Erreur serveur
+ */
 export const createDeck = async (
     req: Request<{}, {}, CreateDeckBody>,
     res: Response
@@ -89,8 +97,15 @@ export const createDeck = async (
     }
 };
 
-//Lister tous les decks de l'utilisateur authentifié
- 
+/**
+ * Liste tous les decks de l'utilisateur connecté
+ * @route GET /api/decks/mine
+ * @param {Request} req - Requête avec req.user.userId depuis le middleware
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne un tableau avec tous les decks de l'utilisateur
+ * @throws {401} Token manquant
+ * @throws {500} Erreur serveur
+ */
 export const getMyDecks = async (
     req: Request,
     res: Response
@@ -129,8 +144,16 @@ export const getMyDecks = async (
 };
 
 /**
- * GET /api/decks/:id
- * Consulter un deck spécifique avec ses cartes
+ * Récupère un deck par son ID avec ses cartes
+ * @route GET /api/decks/:id
+ * @param {Request<{ id: string }>} req - Requête avec l'ID du deck dans req.params.id et req.user.userId depuis le middleware
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne le deck avec ses cartes
+ * @throws {401} Token manquant
+ * @throws {400} ID invalide
+ * @throws {404} Deck introuvable
+ * @throws {403} Deck n'appartient pas à l'utilisateur
+ * @throws {500} Erreur serveur
  */
 export const getDeckById = async (
     req: Request<{ id: string }>,
@@ -194,8 +217,16 @@ export const getDeckById = async (
 };
 
 /**
- * PATCH /api/decks/:id
- * Modifier le nom et/ou les cartes du deck
+ * Modifie le nom et/ou les cartes d'un deck
+ * @route PATCH /api/decks/:id
+ * @param {Request<{ id: string }, {}, UpdateDeckBody>} req - Requête avec l'ID dans req.params.id, name et/ou cards dans le body, req.user.userId depuis le middleware
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne le deck mis à jour avec ses cartes
+ * @throws {401} Token manquant
+ * @throws {400} ID invalide ou deck pas exactement 10 cartes ou cartes inexistantes
+ * @throws {404} Deck introuvable
+ * @throws {403} Deck n'appartient pas à l'utilisateur
+ * @throws {500} Erreur serveur
  */
 export const updateDeck = async (
     req: Request<{ id: string }, {}, UpdateDeckBody>,
@@ -305,8 +336,16 @@ export const updateDeck = async (
 };
 
 /**
- * DELETE /api/decks/:id
- * Supprimer définitivement un deck
+ * Supprime un deck et ses cartes
+ * @route DELETE /api/decks/:id
+ * @param {Request<{ id: string }>} req - Requête avec l'ID dans req.params.id et req.user.userId depuis le middleware
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne un message de confirmation
+ * @throws {401} Token manquant
+ * @throws {400} ID invalide
+ * @throws {404} Deck introuvable
+ * @throws {403} Deck n'appartient pas à l'utilisateur
+ * @throws {500} Erreur serveur
  */
 export const deleteDeck = async (
     req: Request<{ id: string }>,

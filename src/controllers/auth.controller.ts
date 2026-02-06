@@ -23,7 +23,10 @@ interface SignInBody {
 }
 
 /**
- * Génère un token JWT pour un utilisateur
+ * Génère un token JWT
+ * @param {number} userId - ID de l'utilisateur
+ * @param {string} email - Email de l'utilisateur
+ * @returns {string} Token JWT valide 7 jours
  */
 const generateToken = (userId: number, email: string): string => {
     return jwt.sign(
@@ -34,8 +37,14 @@ const generateToken = (userId: number, email: string): string => {
 };
 
 /**
- * POST /api/auth/sign-up
- * Créer un nouveau compte utilisateur avec authentification JWT
+ * Crée un nouveau compte utilisateur
+ * @route POST /api/auth/sign-up
+ * @param {Request<{}, {}, SignUpBody>} req - Requête avec email, username et password dans le body
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne le token JWT et les infos utilisateur (sans mot de passe)
+ * @throws {400} Données manquantes ou invalides
+ * @throws {409} Email ou username déjà utilisé
+ * @throws {500} Erreur serveur
  */
 export const signUp = async (
     req: Request<{}, {}, SignUpBody>,
@@ -136,8 +145,14 @@ export const signUp = async (
 };
 
 /**
- * POST /api/auth/sign-in
- * Se connecter avec un compte existant et recevoir un token JWT
+ * Connecte un utilisateur et retourne un token JWT
+ * @route POST /api/auth/sign-in
+ * @param {Request<{}, {}, SignInBody>} req - Requête avec email et password dans le body
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne le token JWT et les infos utilisateur (sans mot de passe)
+ * @throws {400} Email ou password manquant
+ * @throws {401} Email ou mot de passe incorrect
+ * @throws {500} Erreur serveur
  */
 export const signIn = async (
     req: Request<{}, {}, SignInBody>,
