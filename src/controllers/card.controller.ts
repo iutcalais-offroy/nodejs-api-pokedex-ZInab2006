@@ -2,6 +2,14 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../database";
 
+/**
+ * Retourne toutes les cartes Pokémon triées par numéro Pokédex
+ * @route GET /api/cards
+ * @param {Request} _req - Requête Express (non utilisée)
+ * @param {Response} res - Réponse Express
+ * @returns {Promise<void>} Retourne un tableau avec toutes les cartes
+ * @throws {500} Erreur serveur
+ */
 export const getAllCards = async (
     _req: Request,
     res: Response

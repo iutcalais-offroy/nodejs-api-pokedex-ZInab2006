@@ -4,14 +4,14 @@ import { signUp, signIn } from "../controllers/auth.controller";
 const router = Router();
 
 /**
- * POST /api/auth/sign-up
- * Créer un nouveau compte utilisateur
+ * Route POST /api/auth/sign-up
+ * Crée un nouveau compte utilisateur
  */
 router.post("/sign-up", signUp);
 
 /**
- * POST /api/auth/sign-in
- * Se connecter avec un compte existant
+ * Route POST /api/auth/sign-in
+ * Connecte un utilisateur et retourne un token JWT
  */
 router.post("/sign-in", signIn);
 

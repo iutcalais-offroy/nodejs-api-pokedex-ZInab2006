@@ -3,7 +3,16 @@ import jwt from "jsonwebtoken";
 import { env } from "../env";
 import { StatusCodes } from "http-status-codes";
 
-
+/**
+ * Middleware qui vérifie le token JWT dans l'en-tête Authorization
+ * Ajoute userId et email dans req.user si le token est valide
+ * @param {Request} req - Requête Express
+ * @param {Response} res - Réponse Express
+ * @param {NextFunction} next - Fonction pour passer au middleware suivant
+ * @returns {void} Appelle next() si OK, sinon retourne une erreur
+ * @throws {401} Token manquant, invalide ou expiré
+ * @throws {500} Erreur serveur
+ */
 export const authenticateToken = (
     req: Request,
     res: Response,
