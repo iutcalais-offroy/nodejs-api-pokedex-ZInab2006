@@ -1,0 +1,41 @@
+paths:
+  /api/cards:
+    get:
+      tags:
+        - Cards
+      summary: Liste toutes les cartes Pokémon
+      description: Endpoint public qui retourne toutes les cartes disponibles, triées par numéro Pokédex croissant
+      responses:
+        '200':
+          description: Liste des cartes Pokémon
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Card'
+              example:
+                - id: 1
+                  name: 'Bulbasaur'
+                  hp: 45
+                  attack: 49
+                  type: 'Grass'
+                  pokedexNumber: 1
+                  imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png'
+                  createdAt: '2024-01-01T00:00:00.000Z'
+                  updatedAt: '2024-01-01T00:00:00.000Z'
+                - id: 2
+                  name: 'Ivysaur'
+                  hp: 60
+                  attack: 62
+                  type: 'Grass'
+                  pokedexNumber: 2
+                  imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png'
+                  createdAt: '2024-01-01T00:00:00.000Z'
+                  updatedAt: '2024-01-01T00:00:00.000Z'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
