@@ -91,8 +91,8 @@ let nextRoomId = 1
 function shuffle<T>(array: T[]): T[] {
   const out = [...array]
   for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]]
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
   }
   return out
 }
@@ -135,10 +135,7 @@ function emitGameStateUpdated(roomId: number): void {
   const hostSocket = io.sockets.sockets.get(room.hostSocketId)
   const guestSocket = io.sockets.sockets.get(room.guestSocketId)
   if (!hostSocket || !guestSocket) return
-  hostSocket.emit(
-    'gameStateUpdated',
-    buildGameStateView(roomId, state, 'host'),
-  )
+  hostSocket.emit('gameStateUpdated', buildGameStateView(roomId, state, 'host'))
   guestSocket.emit(
     'gameStateUpdated',
     buildGameStateView(roomId, state, 'guest'),
@@ -412,7 +409,15 @@ io.on('connection', (socket: AuthedSocket) => {
         }
 
         const toGameCards = (
-          deckCards: { card: { id: number; name: string; hp: number; attack: number; type: PokemonType } }[],
+          deckCards: {
+            card: {
+              id: number
+              name: string
+              hp: number
+              attack: number
+              type: PokemonType
+            }
+          }[],
         ): GameCard[] =>
           deckCards.map((dc) => ({
             id: dc.card.id,
@@ -474,55 +479,52 @@ io.on('connection', (socket: AuthedSocket) => {
         console.error('Erreur lors de joinRoom:', error)
         socket.emit('error', {
           event: 'joinRoom',
-          message: "Erreur lors de la jonction de la room",
+          message: 'Erreur lors de la jonction de la room',
         })
       }
     },
   )
 
-  socket.on(
-    'drawCards',
-    (payload: { roomId?: number | string }) => {
-      const roomId = Number(payload?.roomId)
-      if (!payload?.roomId || Number.isNaN(roomId)) {
-        socket.emit('error', {
-          event: 'drawCards',
-          message: 'Room ID invalide',
-        })
-        return
-      }
-      const room = rooms.get(roomId)
-      const state = gameStates.get(roomId)
-      if (!room || !state || !room.guestSocketId) {
-        socket.emit('error', {
-          event: 'drawCards',
-          message: "Room introuvable ou partie non démarrée",
-        })
-        return
-      }
-      if (state.currentPlayerSocketId !== socket.id) {
-        socket.emit('error', {
-          event: 'drawCards',
-          message: "Ce n'est pas votre tour",
-        })
-        return
-      }
-      const isHost = socket.id === room.hostSocketId
-      const deck = isHost ? state.hostDeck : state.guestDeck
-      const hand = isHost ? state.hostHand : state.guestHand
-      while (hand.length < 5 && deck.length > 0) {
-        hand.push(deck.pop()!)
-      }
-      if (isHost) {
-        state.hostDeck = deck
-        state.hostHand = hand
-      } else {
-        state.guestDeck = deck
-        state.guestHand = hand
-      }
-      emitGameStateUpdated(roomId)
-    },
-  )
+  socket.on('drawCards', (payload: { roomId?: number | string }) => {
+    const roomId = Number(payload?.roomId)
+    if (!payload?.roomId || Number.isNaN(roomId)) {
+      socket.emit('error', {
+        event: 'drawCards',
+        message: 'Room ID invalide',
+      })
+      return
+    }
+    const room = rooms.get(roomId)
+    const state = gameStates.get(roomId)
+    if (!room || !state || !room.guestSocketId) {
+      socket.emit('error', {
+        event: 'drawCards',
+        message: 'Room introuvable ou partie non démarrée',
+      })
+      return
+    }
+    if (state.currentPlayerSocketId !== socket.id) {
+      socket.emit('error', {
+        event: 'drawCards',
+        message: "Ce n'est pas votre tour",
+      })
+      return
+    }
+    const isHost = socket.id === room.hostSocketId
+    const deck = isHost ? state.hostDeck : state.guestDeck
+    const hand = isHost ? state.hostHand : state.guestHand
+    while (hand.length < 5 && deck.length > 0) {
+      hand.push(deck.pop()!)
+    }
+    if (isHost) {
+      state.hostDeck = deck
+      state.hostHand = hand
+    } else {
+      state.guestDeck = deck
+      state.guestHand = hand
+    }
+    emitGameStateUpdated(roomId)
+  })
 
   socket.on(
     'playCard',
@@ -548,7 +550,7 @@ io.on('connection', (socket: AuthedSocket) => {
       if (!room || !state || !room.guestSocketId) {
         socket.emit('error', {
           event: 'playCard',
-          message: "Room introuvable ou partie non démarrée",
+          message: 'Room introuvable ou partie non démarrée',
         })
         return
       }
@@ -602,7 +604,7 @@ io.on('connection', (socket: AuthedSocket) => {
     if (!room || !state || !room.guestSocketId) {
       socket.emit('error', {
         event: 'attack',
-        message: "Room introuvable ou partie non démarrée",
+        message: 'Room introuvable ou partie non démarrée',
       })
       return
     }
@@ -619,7 +621,7 @@ io.on('connection', (socket: AuthedSocket) => {
     if (!attackerActive) {
       socket.emit('error', {
         event: 'attack',
-        message: 'Vous n\'avez pas de carte active',
+        message: "Vous n'avez pas de carte active",
       })
       return
     }
@@ -693,7 +695,7 @@ io.on('connection', (socket: AuthedSocket) => {
     if (!room || !state || !room.guestSocketId) {
       socket.emit('error', {
         event: 'endTurn',
-        message: "Room introuvable ou partie non démarrée",
+        message: 'Room introuvable ou partie non démarrée',
       })
       return
     }
@@ -717,10 +719,7 @@ io.on('connection', (socket: AuthedSocket) => {
     let updated = false
 
     rooms.forEach((room, roomId) => {
-      if (
-        room.hostSocketId === socket.id ||
-        room.guestSocketId === socket.id
-      ) {
+      if (room.hostSocketId === socket.id || room.guestSocketId === socket.id) {
         rooms.delete(roomId)
         gameStates.delete(roomId)
         updated = true
@@ -741,4 +740,3 @@ if (env.NODE_ENV !== 'test') {
 }
 
 export { app, io }
-
