@@ -6,8 +6,9 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "ts:check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
     "test": "vitest --coverage --run",
     "test:ui": "vitest --ui",
@@ -21,7 +22,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,js,json,yml,yaml}\" \"tests/**/*.{ts,js}\" \"prisma/**/*.ts\" \"*.{ts,js,json,md,yml,yaml,mjs}\" --ignore-path .prettierignore",
-    "format:check": "prettier --check \"src/**/*.{ts,js,json,yml,yaml}\" \"tests/**/*.{ts,js}\" \"prisma/**/*.ts\" \"*.{ts,js,json,md,yml,yaml,mjs}\" --ignore-path .prettierignore"
+    "format:check": "prettier --check \"src/**/*.{ts,js,json,yml,yaml}\" \"tests/**/*.{ts,js}\" \"prisma/**/*.ts\" \"*.{ts,js,json,md,yml,yaml,mjs}\" --ignore-path .prettierignore",
+    "prepare": "husky"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.1.0",
@@ -41,6 +43,8 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@eslint/js": "^9.39.2",
     "@types/bcryptjs": "2.4.6",
     "@types/cors": "2.8.17",
@@ -58,6 +62,7 @@
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
     "prettier": "^3.8.1",
     "supertest": "^7.2.2",
     "tsx": "4.7.0",

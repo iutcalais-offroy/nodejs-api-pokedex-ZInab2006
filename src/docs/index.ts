@@ -15,7 +15,7 @@ if (!existsSync(path.join(docsDir, 'swagger.config.yml'))) {
 const swaggerConfig = YAML.load(path.join(docsDir, 'swagger.config.yml'))
 
 // Charger les documentations des modules
-   const authDoc = YAML.load(path.join(docsDir, 'auth.doc.yml'))
+const authDoc = YAML.load(path.join(docsDir, 'auth.doc.yml'))
 const cardDoc = YAML.load(path.join(docsDir, 'card.doc.yml'))
 const deckDoc = YAML.load(path.join(docsDir, 'deck.doc.yml'))
 
