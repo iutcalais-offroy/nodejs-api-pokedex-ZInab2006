@@ -31,3 +31,6 @@ coverage
 # Prisma
 prisma/migrations
 
+# Generated Prisma client (ignorer pour éviter les faux positifs de formatage)
+src/generated
+
