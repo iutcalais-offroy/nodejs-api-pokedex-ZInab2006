@@ -404,3 +404,5 @@ Chaque ticket a une valeur en points indiquée dans l'issue :
 - ✅ **Commits atomiques** : Faites des commits réguliers avec des messages clairs
 - ✅ **Tests avant PR** : Assurez-vous que tout fonctionne avant de demander une review
 - ✅ **Documentation** : Commentez votre code pour faciliter la review
+
+Note: déploiement Railway configuré.
