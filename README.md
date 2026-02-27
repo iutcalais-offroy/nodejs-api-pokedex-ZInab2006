@@ -406,3 +406,5 @@ Chaque ticket a une valeur en points indiquée dans l'issue :
 - ✅ **Documentation** : Commentez votre code pour faciliter la review
 
 Note: déploiement Railway configuré.
+
+Note: déploiement Railway configuré.
